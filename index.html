@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE TWO-WAY BRICK HOUSE · One-Way Bricks, Two-Way Whole</title>
+<style>
+:root{
+  --paper:#f0ebf5; --ink:#2a2438; --ink-mid:#4a4360; --ink-faint:#8a83a0;
+  --plum:#5b3a87; --plum-light:#7e5bb0; --plum-soft:#e6ddf0; --plum-deep:#3f2860;
+  --gold:#9a7d3a; --rose:#9a4a6a; --green:#3a7a5a; --ab:#3a6a87; --ba:#9a4a6a;
+  --line:#cbbfdd;
+  --mono:"Courier New",Courier,monospace;
+  --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);
+  background-image:repeating-linear-gradient(0deg, rgba(91,58,135,.03) 0 1px, transparent 1px 3px);
+  color:var(--ink);font-family:var(--serif);line-height:1.55;padding:10px}
+.sheet{max-width:820px;margin:0 auto;border:2.5px solid var(--plum);padding:0;position:relative}
+.sheet::before{content:'';position:absolute;inset:5px;border:1px solid var(--plum-light);pointer-events:none}
+.inner{padding:22px}
+.masthead{text-align:center;border-bottom:2px solid var(--plum);padding-bottom:12px}
+.mast-eyebrow{font-family:var(--mono);font-size:9px;letter-spacing:.24em;color:var(--plum-light);text-transform:uppercase}
+.mast-title{font-size:clamp(20px,4.8vw,34px);letter-spacing:.02em;font-weight:700;margin:6px 0 2px;text-transform:uppercase;color:var(--plum)}
+.mast-sub{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--ink-mid)}
+.lede{font-size:12.5px;max-width:680px;margin:12px auto 0;text-align:center;color:var(--ink-mid);line-height:1.6}
+.lede b{color:var(--plum)}
+.paper-tag{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--plum-light);text-align:center;margin-top:8px}
+.canvaswrap{text-align:center;margin:16px 0;border:1.5px solid var(--plum-light);padding:12px;background:rgba(126,91,176,.05)}
+canvas{max-width:100%;height:auto;background:#15101f;border-radius:6px}
+.readout{font-family:var(--mono);font-size:10.5px;text-align:center;margin-top:8px;line-height:1.6;min-height:30px;color:var(--ink-mid)}
+.readout b{color:var(--plum)} .readout .ab{color:var(--ab);font-weight:700} .readout .ba{color:var(--ba);font-weight:700}
+.controls{display:flex;gap:8px;justify-content:center;margin:12px 0;flex-wrap:wrap;align-items:center}
+.cbtn{appearance:none;background:transparent;cursor:pointer;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:9px 14px;border:1.5px solid var(--plum);color:var(--plum);margin:2px}
+.cbtn.ab{border-color:var(--ab);color:var(--ab)} .cbtn.ab.active{background:var(--ab);color:#fff}
+.cbtn.ba{border-color:var(--ba);color:var(--ba)} .cbtn.ba.active{background:var(--ba);color:#fff}
+.cbtn.gold{border-color:var(--gold);color:#6a5520}
+h2.sec{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;border-bottom:1.5px solid var(--plum);padding-bottom:4px;margin:22px 0 10px;color:var(--plum)}
+h2.sec .num{color:var(--rose);margin-right:8px}
+.body p{font-size:13px;margin-bottom:8px}
+.body b{color:var(--ink)}
+.def{font-family:var(--mono);font-size:10.5px;background:var(--plum-soft);border-left:2px solid var(--plum-light);padding:9px 12px;margin:9px 0;line-height:1.7;color:var(--ink-mid)}
+.def b{color:var(--plum)}
+.honest{border:1.5px solid var(--gold);padding:9px 12px;margin:10px 0;font-family:var(--mono);font-size:10px;line-height:1.7;color:var(--ink-mid)}
+.honest b{color:#6a5520}
+.colophon{margin-top:20px;border-top:2px solid var(--plum);padding-top:12px;text-align:center;font-family:var(--mono);font-size:9px;color:var(--ink-mid);letter-spacing:.05em;line-height:1.9}
+.colophon b{color:var(--plum)}
+</style>
+</head>
+<body>
+<div class="sheet"><div class="inner">
+
+<header class="masthead">
+  <div class="mast-eyebrow">Series E · The Inversion · One-Way Bricks, Two-Way Whole</div>
+  <h1 class="mast-title">The Two-Way Brick House</h1>
+  <div class="mast-sub">every brick is one-way · the house goes both ways · composed, not inherent</div>
+  <p class="lede">A diode is a <b>one-way brick</b> — in, no out. You can't make a two-way wall from a single one-way brick. But stack two of them <b>anti-parallel</b> (one facing each way) with a <b>direction control</b>, and the pair passes <em>either</em> way — you pick. A row of those is a <b>two-way bus built entirely from one-way bricks.</b> The bricks never stop being one-way. The <em>house</em> is what's two-way.</p>
+  <div class="paper-tag">▣ a purple paper · inverted style ▣</div>
+</header>
+
+<div class="canvaswrap">
+  <canvas id="c" width="560" height="300"></canvas>
+  <div class="readout" id="readout"></div>
+</div>
+<div class="controls">
+  <button class="cbtn ab active" id="dirAB" onclick="setDir(0)">▶ Direction A → B</button>
+  <button class="cbtn ba" id="dirBA" onclick="setDir(1)">◀ Direction B → A</button>
+  <button class="cbtn gold" onclick="send()">⚡ Send Packet</button>
+</div>
+
+<section class="body">
+
+  <h2 class="sec"><span class="num">§1</span> The Brick · genuinely one-way</h2>
+  <p>Each brick is a <b>one-way valve</b> — it passes a packet in <em>its</em> direction only, and blocks the reverse. On its own, it's a diode: in-no-out. No single brick is two-way, and no amount of <em>identical</em> bricks stacked the same way changes that — they'd all just point the same direction.</p>
+  <div class="def">brick = one-way gate. passes its direction, blocks the other. a diode. one brick is never two-way.</div>
+
+  <h2 class="sec"><span class="num">§2</span> The Trick · anti-parallel + control</h2>
+  <p>Put <b>two</b> one-way bricks side by side facing <em>opposite</em> directions — one A→B, one B→A — each with its own enable. Now a <b>direction control</b> picks which brick is open: enable the A→B brick and packets flow right; enable the B→A brick and they flow left. <b>The pair is bidirectional — built from two one-way parts.</b> This is exactly how a real bidirectional bus transceiver works (two banks of one-way buffers and a direction pin).</p>
+  <div class="def">2 one-way bricks, anti-parallel, + a direction control = a bidirectional cell. the cell goes both ways; each brick still goes one way.</div>
+
+  <h2 class="sec"><span class="num">§3</span> The House · the inversion</h2>
+  <p>A row of these cells is a <b>two-way bus</b> — a wall of one-way bricks that, as a whole, carries traffic both directions. <b>You compose one-way primitives precisely to build two-way function.</b> The one-wayness of the brick is what makes it <em>controllable</em>, and controllable one-way valves, wired in opposition, become a router — and routers go both ways. The brick's limitation is the house's freedom.</p>
+  <div class="def">one-way bricks → (compose, anti-parallel, control) → two-way house · the limitation of the part is the capability of the whole · this is the engineering, not a paradox.</div>
+
+  <div class="honest">
+    <b>the honest line:</b> the bricks <em>never</em> become two-way. Watch the canvas — in every send, packets only ever cross the brick that faces their direction; the reverse-facing bricks stay dark (blocked). The two-wayness is <b>composed at the system level</b>, not present in any part. The house is two-way; every brick in it is one-way, always. That's the inversion: <b>one-way all the way down, two-way at the top — and the top-level two-wayness is built from, not in spite of, the bottom-level one-wayness.</b>
+  </div>
+
+</section>
+
+<div class="colophon">
+  EVERY BRICK IS ONE-WAY (A DIODE) · TWO ANTI-PARALLEL BRICKS + CONTROL = A BIDIRECTIONAL CELL<br>
+  A ROW OF CELLS = A TWO-WAY BUS · ONE-WAY PARTS COMPOSED INTO TWO-WAY FUNCTION (THE 74245 TRICK)<br>
+  THE BRICKS NEVER STOP BEING ONE-WAY · THE HOUSE IS TWO-WAY · COMPOSED, NOT INHERENT<br>
+  THE LIMITATION OF THE PART IS THE FREEDOM OF THE WHOLE · A PURPLE PAPER · SERIES E · JUNE 2026
+</div>
+
+</div></div>
+<script>
+const cv=document.getElementById('c'), ctx=cv.getContext('2d');
+const W=560,H=300;
+let dir=0;            // 0 = A->B, 1 = B->A
+let packets=[];       // {x, y, val, vx}
+let anim=null;
+const CELLS=4;        // bidirectional cells across the wall
+const wallX=W/2;
+
+// each cell has two one-way bricks: upper = A->B (points right), lower = B->A (points left)
+function cellY(i){ return 70 + i*48; }
+
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  // endpoints A (left) and B (right)
+  ctx.fillStyle=dir===0?'#3a6a87':'#5b3a87';
+  ctx.font='bold 16px Georgia';ctx.textAlign='center';
+  ctx.fillStyle='#3a6a87';ctx.fillText('A', 28, H/2);
+  ctx.fillStyle='#9a4a6a';ctx.fillText('B', W-28, H/2);
+  ctx.font='9px Courier New';ctx.fillStyle='#8a83a0';
+  ctx.fillText('endpoint', 28, H/2+18); ctx.fillText('endpoint', W-28, H/2+18);
+  // the brick wall - each cell two bricks
+  for(let i=0;i<CELLS;i++){
+    const y=cellY(i);
+    // upper brick: A->B (enabled when dir=0)
+    drawBrick(wallX-26, y-12, 0, dir===0);
+    // lower brick: B->A (enabled when dir=1)
+    drawBrick(wallX-26, y+12, 1, dir===1);
+  }
+  // wall label
+  ctx.fillStyle='#7e5bb0';ctx.font='9px Courier New';ctx.textAlign='center';
+  ctx.fillText('the wall: one-way bricks (2 per cell, anti-parallel)', wallX, 36);
+  // packets
+  packets.forEach(p=>{
+    ctx.beginPath();ctx.arc(p.x,p.y,9,0,2*Math.PI);
+    ctx.fillStyle=p.vx>0?'#5fa8d0':'#e07a9a';ctx.fill();
+    ctx.fillStyle='#fff';ctx.font='bold 9px Courier New';ctx.textAlign='center';
+    ctx.fillText(p.val, p.x, p.y+3);
+  });
+}
+function drawBrick(x,y,brickDir,enabled){
+  // brick body
+  ctx.fillStyle=enabled? (brickDir===0?'rgba(58,106,135,0.35)':'rgba(154,74,106,0.35)') : 'rgba(80,70,110,0.18)';
+  ctx.strokeStyle=enabled? (brickDir===0?'#3a6a87':'#9a4a6a') : '#3a2f54';
+  ctx.lineWidth=enabled?2:1;
+  ctx.beginPath();ctx.rect(x,y-9,52,18);ctx.fill();ctx.stroke();
+  // direction triangle inside (points the brick's allowed way)
+  ctx.fillStyle=enabled? (brickDir===0?'#5fa8d0':'#e07a9a') : '#4a4060';
+  const cx=x+26;
+  if(brickDir===0){ // points right
+    ctx.beginPath();ctx.moveTo(cx-6,y-5);ctx.lineTo(cx+6,y);ctx.lineTo(cx-6,y+5);ctx.closePath();ctx.fill();
+  } else { // points left
+    ctx.beginPath();ctx.moveTo(cx+6,y-5);ctx.lineTo(cx-6,y);ctx.lineTo(cx+6,y+5);ctx.closePath();ctx.fill();
+  }
+  // 'blocked' mark if disabled
+  if(!enabled){
+    ctx.strokeStyle='#6a4060';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(x+4,y-6);ctx.lineTo(x+48,y+6);ctx.stroke();
+  }
+}
+function setDir(d){
+  dir=d;
+  document.getElementById('dirAB').classList.toggle('active',d===0);
+  document.getElementById('dirBA').classList.toggle('active',d===1);
+  const ro=document.getElementById('readout');
+  ro.innerHTML = d===0
+    ? 'direction <span class="ab">A → B</span> · only the right-facing bricks are open · the left-facing bricks are <b>blocked</b>'
+    : 'direction <span class="ba">B → A</span> · only the left-facing bricks are open · the right-facing bricks are <b>blocked</b>';
+  draw();
+}
+function send(){
+  const val=Math.floor(Math.random()*10);
+  const i=Math.floor(Math.random()*CELLS);
+  const y=cellY(i)+(dir===0?-12:12); // packet rides the enabled brick's lane
+  if(dir===0) packets.push({x:45,y,val,vx:3});
+  else packets.push({x:W-45,y,val,vx:-3});
+  if(!anim) anim=setInterval(step,20);
+  document.getElementById('readout').innerHTML = dir===0
+    ? 'packet <b>'+val+'</b> crossing <span class="ab">A → B</span> through a right-facing one-way brick'
+    : 'packet <b>'+val+'</b> crossing <span class="ba">B → A</span> through a left-facing one-way brick';
+}
+function step(){
+  packets.forEach(p=>{ p.x+=p.vx; });
+  packets=packets.filter(p=> p.x>30 && p.x<W-30);
+  draw();
+  if(packets.length===0){ clearInterval(anim);anim=null; }
+}
+setDir(0);
+draw();
+document.getElementById('readout').innerHTML='pick a direction, then <b>Send Packet</b> · watch it cross only the bricks facing its way';
+</script>
+</div>
+</body>
+</html>
